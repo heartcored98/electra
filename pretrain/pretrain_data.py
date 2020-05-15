@@ -30,7 +30,7 @@ from util import utils
 
 
 def get_input_fn(config: configure_pretraining.PretrainingConfig, is_training,
-                 num_cpu_threads=4):
+                 num_cpu_threads=8):
   """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
   input_files = []

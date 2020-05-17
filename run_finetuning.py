@@ -36,7 +36,7 @@ from util import utils
 import neptune
 
 
-neptune.init('kevinjo/electra')
+neptune.init('IRNLP/electra')
 
 
 class FinetuningModel(object):
@@ -246,10 +246,7 @@ def write_results(config: configure_finetuning.FinetuningConfig, results):
             ["{:}: {:.2f}".format(k, v)
              for k, v in task_results.items()]) + "\n"
 
-        neptune.create_experiment(
-          name=f'tf-ft_{task_name}',
-          params=vars(config)
-          )
+        # Neptune Metric Logging
         neptune.append_tag('ft')
         neptune.append_tag('tensorflow')
         neptune.set_property('task', task_name)
@@ -283,6 +280,12 @@ def run_finetuning(config: configure_finetuning.FinetuningConfig):
     t = vars(config)
     print(t)
     print("#################################################")
+
+    # Create Neptune Experiment
+    neptune.create_experiment(
+      name=f'tf-ft',
+      params=vars(config)
+    )
 
     config.model_dir = generic_model_dir + "_" + str(trial) + '_' + str(random.randint(0, 10000))
     if config.do_train:

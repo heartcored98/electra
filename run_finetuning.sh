@@ -6,7 +6,7 @@ export NUM_TRIALS=5
 
 echo $DATA_DIR
 
-python run_finetuning.py --data-dir $DATA_DIR --model-name $MODEL_NAME --hparams '{"model_size": "'$MODEL_SIZE'", "task_names": ["mrpc"], "num_trials": 5}'
+python run_finetuning.py --data-dir $DATA_DIR --model-name $MODEL_NAME --hparams '{"model_size": "'$MODEL_SIZE'", "task_names": ["mrpc"], "num_trials": 1}'
 
 # python run_finetuning.py --data-dir $DATA_DIR --model-name $MODEL_NAME --hparams '{"model_size": ${MODEL_SIZE}, "task_names": ["sts"], "num_trials": ${NUM_TRIALS}'
 # python run_finetuning.py --data-dir $DATA_DIR --model-name $MODEL_NAME --hparams '{"model_size": ${MODEL_SIZE}, "task_names": ["qqp"], "num_trials": ${NUM_TRIALS}'

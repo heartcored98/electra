@@ -22,6 +22,7 @@ from __future__ import print_function
 import argparse
 import collections
 import json
+import random
 
 import tensorflow.compat.v1 as tf
 
@@ -32,6 +33,10 @@ from model import modeling
 from model import optimization
 from util import training_utils
 from util import utils
+import neptune
+
+
+neptune.init('IRNLP/electra')
 
 
 class FinetuningModel(object):
@@ -231,7 +236,7 @@ def write_results(config: configure_finetuning.FinetuningConfig, results):
   utils.log("Writing results to", config.results_txt)
   utils.mkdir(config.results_txt.rsplit("/", 1)[0])
   utils.write_pickle(results, config.results_pkl)
-  with tf.io.gfile.GFile(config.results_txt, "w") as f:
+  with tf.io.gfile.GFile(config.results_txt, "a") as f:
     results_str = ""
     for trial_results in results:
       for task_name, task_results in trial_results.items():
@@ -240,6 +245,14 @@ def write_results(config: configure_finetuning.FinetuningConfig, results):
         results_str += task_name + ": " + " - ".join(
             ["{:}: {:.2f}".format(k, v)
              for k, v in task_results.items()]) + "\n"
+
+        # Neptune Metric Logging
+        neptune.append_tag('ft')
+        neptune.append_tag('tensorflow')
+        neptune.set_property('task', task_name)
+        for k, v in task_results.items():
+          neptune.log_metric(k, v)
+
     f.write(results_str)
   utils.write_pickle(results, config.results_pkl)
 
@@ -260,7 +273,21 @@ def run_finetuning(config: configure_finetuning.FinetuningConfig):
 
   # Train and evaluate num_trials models with different random seeds
   while config.num_trials < 0 or trial <= config.num_trials:
-    config.model_dir = generic_model_dir + "_" + str(trial)
+
+    print("#################################################")
+    print(tasks)
+
+    t = vars(config)
+    print(t)
+    print("#################################################")
+
+    # Create Neptune Experiment
+    neptune.create_experiment(
+      name=f'tf-ft',
+      params=vars(config)
+    )
+
+    config.model_dir = generic_model_dir + "_" + str(trial) + '_' + str(random.randint(0, 10000))
     if config.do_train:
       utils.rmkdir(config.model_dir)
 
@@ -272,7 +299,9 @@ def run_finetuning(config: configure_finetuning.FinetuningConfig):
 
     if config.do_eval:
       heading("Run dev set evaluation")
-      results.append(model_runner.evaluate())
+      eval_result = model_runner.evaluate()
+      results.append(eval_result)
+
       write_results(config, results)
       if config.write_test_outputs and trial <= config.n_writes_test:
         heading("Running on the test set and writing the predictions")

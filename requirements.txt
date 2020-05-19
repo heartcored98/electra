@@ -1,0 +1,7 @@
+torch==1.4.0+cu100
+transformers
+pytorch-lightning
+neptune-client
+psutil # for monitoring
+https://github.com/vicolab/ml-pyxis/archive/master.zip # pyxis for lmdb dataset
+

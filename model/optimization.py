@@ -64,7 +64,7 @@ def create_optimizer(
       zip(grads, tvars), global_step=global_step)
   new_global_step = global_step + 1
   train_op = tf.group(train_op, [global_step.assign(new_global_step)])
-  return train_op
+  return train_op, optimizer
 
 
 class AdamWeightDecayOptimizer(tf.train.Optimizer):

@@ -1,7 +1,4 @@
-torch==1.4.0+cu100
-transformers
-pytorch-lightning
+sklearn
+tensorflow-gpu==1.15
+neptune-tensorboard
 neptune-client
-psutil # for monitoring
-https://github.com/vicolab/ml-pyxis/archive/master.zip # pyxis for lmdb dataset
-

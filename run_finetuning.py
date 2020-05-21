@@ -91,6 +91,11 @@ def model_fn_builder(config: configure_finetuning.FinetuningConfig, tasks,
 
     # Load pre-trained weights from checkpoint
     init_checkpoint = config.init_checkpoint
+
+    print("####################")
+    print(init_checkpoint)
+    print("####################")
+    
     if pretraining_config is not None:
       init_checkpoint = tf.train.latest_checkpoint(pretraining_config.model_dir)
       utils.log("Using checkpoint", init_checkpoint)

@@ -244,6 +244,10 @@ class PretrainingModel(object):
     """Build a transformer encoder network."""
     if bert_config is None:
       bert_config = self._bert_config
+
+    print("###### Debug ########")
+    print(vars(bert_config))
+    print("###################")
     with tf.variable_scope(tf.get_variable_scope(), reuse=reuse):
       return modeling.BertModel(
           bert_config=bert_config,

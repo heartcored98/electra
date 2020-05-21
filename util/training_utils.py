@@ -26,6 +26,7 @@ import tensorflow.compat.v1 as tf
 
 from model import modeling
 from util import utils
+import neptune
 
 
 class ETAHook(tf.estimator.SessionRunHook):
@@ -80,6 +81,9 @@ class ETAHook(tf.estimator.SessionRunHook):
         (self._n_steps - step) * time_per_step)
     if run_values is not None:
       for tag, value in run_values.results.items():
+        if isinstance(value, tuple):
+          value = value[0] * 100
+        neptune.log_metric(tag, value)
         msg += " - " + str(tag) + (": {:.4f}".format(value))
     utils.log(msg)
 

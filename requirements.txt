@@ -1,0 +1,4 @@
+sklearn
+tensorflow-gpu==1.15
+neptune-tensorboard
+neptune-client

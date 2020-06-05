@@ -114,7 +114,7 @@ def model_fn_builder(config: configure_finetuning.FinetuningConfig, tasks,
 
     # Build model for training or prediction
     if mode == tf.estimator.ModeKeys.TRAIN:
-      train_op = optimization.create_optimizer(
+      train_op, optimizer = optimization.create_optimizer(
           model.loss, config.learning_rate, num_train_steps,
           weight_decay_rate=config.weight_decay_rate,
           use_tpu=config.use_tpu,

@@ -1,5 +1,6 @@
 
 export CUDA_VISIBLE_DEVICES=0
+export TF_FORCE_GPU_ALLOW_GROWTH=true
 export DATA_DIR=dataset
 export MODEL_NAME=electra_small_owt
 export MODEL_SIZE=small
